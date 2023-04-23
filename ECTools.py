@@ -1,3 +1,6 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 class Point():
     def __init__(self,x,y):
         """
@@ -271,3 +274,35 @@ class ECFactory():
         result,order = curve.get_generated_points(group,org)
         print("origin : "+str(org)+" / order : " + str(order)+ " / sequence : ",end="")
         print(*result)
+
+        return result
+
+    def plot_sequence(self,sequence):
+        xy = list()
+        for item in sequence:
+            if not item.isInfinity():
+                xy.append([item.point.x,item.point.y,item.k])
+
+        data = np.array(xy)
+        x, y, k = data.T
+        #plt.scatter(x,y)           # If you just need points
+        plt.plot(x,y,'bo-')
+
+        # https://queirozf.com/entries/add-labels-and-text-to-matplotlib-plots-annotation-examples
+        for x,y,k in zip(x,y,k):
+            label = "1 Origin" if (k==1) else "{:d}".format(k)
+            plt.annotate(label, # this is the text
+                    (x,y), # these are the coordinates to position the label
+                    textcoords="offset points", # how to position the text
+                    xytext=(0,10), # distance from text to points (x,y)
+                    ha='center') # horizontal alignment can be left, right or center
+            
+            # if you don't want arrow, disable this 
+            if (k != 1):
+                n = 10*((x-ox)**2+(y-oy)**2)**0.5
+                plt.arrow((x+ox)/2,(y+oy)/2,(x-ox)/n,(y-oy)/n, shape='full', lw=0, length_includes_head=True, head_width=0.2)
+            ox = x
+            oy = y
+
+        plt.grid()
+        plt.show()
