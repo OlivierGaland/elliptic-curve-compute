@@ -275,18 +275,22 @@ class ECFactory():
         print("origin : "+str(org)+" / order : " + str(order)+ " / sequence : ",end="")
         print(*result)
 
-        return result
+    def plot_group(self,group,curve,origin):
+        
+        org = ECPoint(origin,group,curve)
+        result,order = curve.get_generated_points(group,org)
 
-    def plot_sequence(self,sequence):
         xy = list()
-        for item in sequence:
+        for item in result:
             if not item.isInfinity():
                 xy.append([item.point.x,item.point.y,item.k])
 
         data = np.array(xy)
         x, y, k = data.T
-        #plt.scatter(x,y)           # If you just need points
-        plt.plot(x,y,'bo-')
+        plt.scatter(x,y)           # If you just need points
+        plt.xlabel("X")
+        plt.ylabel("Y",rotation='horizontal')
+        plt.title(str(curve)+" ["+str(group.p)+"] with origin "+str(origin)+" : order is "+str(order))
 
         # https://queirozf.com/entries/add-labels-and-text-to-matplotlib-plots-annotation-examples
         for x,y,k in zip(x,y,k):
@@ -297,10 +301,27 @@ class ECFactory():
                     xytext=(0,10), # distance from text to points (x,y)
                     ha='center') # horizontal alignment can be left, right or center
             
-            # if you don't want arrow, disable this 
             if (k != 1):
                 n = 10*((x-ox)**2+(y-oy)**2)**0.5
-                plt.arrow((x+ox)/2,(y+oy)/2,(x-ox)/n,(y-oy)/n, shape='full', lw=0, length_includes_head=True, head_width=0.2)
+
+                if len(xy) % 2 == 1:   # res = factory.print_group(ECGroup(11),ECCurve(0,7),Point(4,4))
+                    if k < (len(xy)+1)//2:
+                        color = 'b'
+                    elif k > (len(xy)+1)//2 + 1:
+                        color = 'g'
+                    else:
+                        color = 'r'
+                else:
+                    if k < (len(xy)+1)//2 + 1:    # res = factory.print_group(ECGroup(31),ECCurve(0,7),Point(25,16))
+                        color = 'b'
+                    elif k > (len(xy)+1)//2 + 1:
+                        color = 'g'
+                    else:
+                        color = 'r'
+
+                plt.arrow((x+ox)/2,(y+oy)/2,(x-ox)/n,(y-oy)/n, shape='full', lw=1, length_includes_head=True, head_width=0.1, color = color)
+                plt.plot([ox, x],[oy, y], color = color)
+
             ox = x
             oy = y
 
