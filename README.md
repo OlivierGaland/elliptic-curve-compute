@@ -19,5 +19,9 @@
 Here is an example of display for the curve y^2=x^3+7 over the field F17 (finite field with prime=17) :
 ![image](https://user-images.githubusercontent.com/26048157/233725032-49c5ea9d-4623-4d24-9502-a61db259d0c9.png)
 
-Another example of displayed graph for a generated sequence :
+Here is the displayed graph for a generated sequence on this curve with origin = (6,11) :
 ![image](https://user-images.githubusercontent.com/26048157/233813982-83353050-ac78-45df-9665-a616b0d32886.png)
+
+Here is the displayed graph for a generated sequence on this curve with another origin = (15,13) :
+![image](https://user-images.githubusercontent.com/26048157/233875553-9d2f10cb-c90d-4952-aefb-1d1a28ac1581.png)
+
